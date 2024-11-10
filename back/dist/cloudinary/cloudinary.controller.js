@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const cloudinary_service_1 = require("./cloudinary.service");
 const fileValidation_pipe_1 = require("../pipes/fileValidation.pipe");
-const auth_guard_1 = require("../auth/auth.guard");
+const auth_guard_1 = require("../auth/guards/auth.guard");
 let CloudinaryController = class CloudinaryController {
     constructor(cloudinaryService) {
         this.cloudinaryService = cloudinaryService;

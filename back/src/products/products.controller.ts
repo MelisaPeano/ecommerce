@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Products } from 'src/entitys/products.entity';
 
 @Controller('products')

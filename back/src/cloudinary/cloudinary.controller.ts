@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadApiResponse } from 'cloudinary';
 import { CloudinaryService } from './cloudinary.service';
 import { FileValidationPipe } from 'src/pipes/fileValidation.pipe';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('files')
 export class CloudinaryController {

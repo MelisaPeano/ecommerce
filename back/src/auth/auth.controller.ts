@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from 'src/users/dto/loginUser.dto';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {

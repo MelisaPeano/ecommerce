@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { UserResponseDto } from './dto/responseUser.dto';
 import { Request } from 'express';
