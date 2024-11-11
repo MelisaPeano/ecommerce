@@ -18,7 +18,6 @@ const auth_service_1 = require("./auth.service");
 const users_service_1 = require("../users/users.service");
 const loginUser_dto_1 = require("../users/dto/loginUser.dto");
 const createUser_dto_1 = require("../users/dto/createUser.dto");
-const auth_guard_1 = require("./guards/auth.guard");
 let AuthController = class AuthController {
     constructor(authService, usersService) {
         this.authService = authService;
@@ -28,29 +27,18 @@ let AuthController = class AuthController {
         return this.authService.getUsers();
     }
     async loginUser(user) {
-        if (!user.email && user.password) {
-            throw new common_1.BadRequestException('faltan datos');
-        }
         const login = await this.usersService.loginUser(user);
         return login;
     }
-    async signupUser(user, repetPassword) {
-        if (!user.password && !repetPassword) {
-            throw new common_1.BadRequestException('Falta completar campos requeridos');
-        }
-        if (user.password === repetPassword) {
-            await this.usersService.createUser(user);
-            const signup = {
-                id: user.name,
-                name: user.name,
-                phone: user.phone,
-                email: user.email,
-            };
-            return signup;
-        }
-        else {
-            throw new common_1.BadRequestException('campos incorrectos');
-        }
+    async signupUser(user) {
+        await this.usersService.createUser(user);
+        const signup = {
+            id: user.name,
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+        };
+        return signup;
     }
 };
 exports.AuthController = AuthController;
@@ -62,9 +50,8 @@ __decorate([
 ], AuthController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('signin'),
-    __param(0, (0, common_1.Body)('User')),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [loginUser_dto_1.LoginUserDto]),
     __metadata("design:returntype", Promise)
@@ -72,10 +59,9 @@ __decorate([
 __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     (0, common_1.Post)('signup'),
-    __param(0, (0, common_1.Body)('User')),
-    __param(1, (0, common_1.Body)('password')),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [createUser_dto_1.CreateUserDto, String]),
+    __metadata("design:paramtypes", [createUser_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signupUser", null);
 exports.AuthController = AuthController = __decorate([

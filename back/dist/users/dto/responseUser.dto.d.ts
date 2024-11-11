@@ -1,3 +1,4 @@
+import { Order } from "src/entitys/order.entity";
 export declare class UserResponseDto {
     name: string;
     email: string;
@@ -5,6 +6,6 @@ export declare class UserResponseDto {
     phone: number;
     country?: string | undefined;
     city?: string | undefined;
-    orders?: object | object[];
+    orders?: Order[];
     constructor(user: Partial<UserResponseDto>);
 }

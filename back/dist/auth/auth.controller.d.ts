@@ -11,11 +11,11 @@ export declare class AuthController {
         user: {
             id: string;
             email: string;
-            name: string;
+            role: import("../enums/role.enum").Roles[];
         };
         token: string;
     }>;
-    signupUser(user: CreateUserDto, repetPassword: string): Promise<{
+    signupUser(user: CreateUserDto): Promise<{
         id: string;
         name: string;
         phone: number;

@@ -11,6 +11,7 @@ import { UpdateUserDto } from './dto/updateUser.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserResponseDto } from './dto/responseUser.dto';
+import { Roles } from 'src/enums/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -47,11 +48,8 @@ export class UsersService {
       console.log('error en el servicio de usuarios', error);
     }
   }
-  async getUsersById(id: string): Promise<
-    Omit<Users, 'password'> & {
-      orders: Order[];
-    }
-  > {
+  async getUsersById(id: string): Promise<UserResponseDto> {
+    console.log(`Buscando usuario con ID: ${id}`);
     try {
       const users = await this.usersRepository.findOne({
         where: { id },
@@ -65,9 +63,9 @@ export class UsersService {
         date: order.date,
         orderDetail: order.orderDetail,
         user_id: order.user_id,
+        user: order.user,
       }));
       return {
-        id: id,
         name: users.name,
         email: users.email,
         address: users.address,
@@ -78,6 +76,7 @@ export class UsersService {
       };
     } catch (error) {
       console.log('error en el servicio de usuarios', error);
+      throw new Error('Error al obtener el usuario');
     }
   }
   async createUser(user: CreateUserDto): Promise<UserResponseDto> {
@@ -89,27 +88,34 @@ export class UsersService {
         throw new Error(`El usuario ${user.email} ya existe`);
       }
       const salt = await bcrypt.genSalt();
-
-      const hash = await bcrypt.hash(userFound.password, salt);
-      const createSuccess = this.usersRepository.create({
+      const hash = await bcrypt.hash(user.password, salt);
+      const userCreated = {
         id: uuid(),
-        password: hash,
-        ...userFound,
-      });
-      return new UserResponseDto(createSuccess);
+        ...user,
+        password: hash
+      }
+      const roleUser = user.role || Roles.USER;
+      const createSuccess = this.usersRepository.create(userCreated);
+      const savedUser = await this.usersRepository.save(createSuccess);
+      return new UserResponseDto(savedUser);
     } catch (error) {
       throw new Error(
-        `Error al crear el usuario, vuelve a intentarlo ${error}`,
+        `Error al crear el usuario, vuelve a intentarlo ${error.message}`,
       );
     }
   }
   async updateUser(id: string, userfound: UpdateUserDto): Promise<Users> {
     try {
+      if (!userfound || Object.keys(userfound).length === 0) {
+        throw new Error('No se proporcionaron valores para actualizar');
+      }
+  
       await this.usersRepository.update(id, userfound);
       const updatedUser = await this.usersRepository.findOneBy({ id });
       return updatedUser;
     } catch (error) {
       console.log('error al actualizar el usuario en el servicio', error);
+      throw new Error('Error al actualizar el usuario');
     }
   }
   async deleteUser(id: string): Promise<string> {
@@ -123,6 +129,9 @@ export class UsersService {
     }
   }
   async loginUser(user: LoginUserDto) {
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET no está definido en las variables de entorno');
+    }
     try {
       const userFound = await this.usersRepository.findOneBy({
         email: user.email,
@@ -131,19 +140,21 @@ export class UsersService {
         throw new UnauthorizedException('User not found');
       }
       const isPasswordValid = await bcrypt.compare(
-        userFound.password,
         user.password,
+        userFound.password,
       );
+      console.log('¿Es válida la contraseña?', isPasswordValid);
       if (!isPasswordValid) {
         throw new UnauthorizedException('Credenciales incorrectas');
       }
-      const payload = { userId: userFound.id, email: userFound.email };
-      const token = this.jwtService.sign(payload, { expiresIn: '1h' });
+      const secret = process.env.JWT_SECRET || 'default_secret_key';
+      const payload = { userId: userFound.id, email: userFound.email, role: userFound.role };
+      const token = this.jwtService.sign(payload, {secret, expiresIn: '1h' });
       return {
         user: {
           id: userFound.id,
           email: userFound.email,
-          name: userFound.name,
+          role: [userFound.role],
         },
         token,
       };

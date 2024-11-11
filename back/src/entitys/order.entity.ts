@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -18,6 +19,9 @@ export class Order {
   user_id: string;
   @Column('timestamp')
   date: Date = new Date();
+  @ManyToOne(() => Users, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
+  user: Users;
   @OneToOne(() => OrderDetail)
   @JoinColumn()
   orderDetail: OrderDetail;

@@ -13,6 +13,7 @@ exports.Users = void 0;
 const typeorm_1 = require("typeorm");
 const uuid_1 = require("uuid");
 const order_entity_1 = require("./order.entity");
+const role_enum_1 = require("../enums/role.enum");
 let Users = class Users {
     constructor() {
         this.id = (0, uuid_1.v4)();
@@ -32,7 +33,7 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)('varchar', { length: 20, nullable: false }),
+    (0, typeorm_1.Column)('varchar', { length: 60, nullable: false }),
     __metadata("design:type", String)
 ], Users.prototype, "password", void 0);
 __decorate([
@@ -52,9 +53,13 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "city", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => order_entity_1.Order, (order) => order.user_id),
+    (0, typeorm_1.OneToMany)(() => order_entity_1.Order, (order) => order.user),
     __metadata("design:type", Array)
 ], Users.prototype, "orders", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: role_enum_1.Roles.USER }),
+    __metadata("design:type", String)
+], Users.prototype, "role", void 0);
 exports.Users = Users = __decorate([
     (0, typeorm_1.Entity)({
         name: 'users',

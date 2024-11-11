@@ -1,8 +1,8 @@
 import { UsersService } from './users.service';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { UserResponseDto } from './dto/responseUser.dto';
 import { Request } from 'express';
+import { UpdateUserDto } from './dto/updateUser.dto';
 export interface UserInterface {
     email: string;
     name?: string;
@@ -18,6 +18,6 @@ export declare class UsersController {
     getUsers(page?: number, limit?: number): Promise<PaginatedResult<UserResponseDto>>;
     getAuth0Protected(req: Request): string;
     getUserById(id: string): Promise<UserResponseDto>;
-    updateUser(user: CreateUserDto, id: string): Promise<string>;
+    updateUser(user: UpdateUserDto, id: string): Promise<string>;
     deleteUser(id: string): Promise<string>;
 }

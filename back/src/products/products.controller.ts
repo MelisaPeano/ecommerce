@@ -15,6 +15,9 @@ import { ProductsService } from './products.service';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Products } from 'src/entitys/products.entity';
+import { RoleUser } from 'src/decorators/roles.decorator';
+import { Roles } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -54,8 +57,9 @@ export class ProductsController {
     }
   }
   @HttpCode(200) // ACA DEBO RECIBIR LA MODIFICACION
+  @RoleUser(Roles.ADMIN)
   @Put(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   async updateProduct(
     @Body() product: Products,
     @Param('id') id: string,

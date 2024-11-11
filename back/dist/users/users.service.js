@@ -44,6 +44,7 @@ const uuid_1 = require("uuid");
 const bcrypt = __importStar(require("bcrypt"));
 const jwt_1 = require("@nestjs/jwt");
 const responseUser_dto_1 = require("./dto/responseUser.dto");
+const role_enum_1 = require("../enums/role.enum");
 let UsersService = class UsersService {
     constructor(usersRepository, jwtService) {
         this.usersRepository = usersRepository;
@@ -76,6 +77,7 @@ let UsersService = class UsersService {
         }
     }
     async getUsersById(id) {
+        console.log(`Buscando usuario con ID: ${id}`);
         try {
             const users = await this.usersRepository.findOne({
                 where: { id },
@@ -89,9 +91,9 @@ let UsersService = class UsersService {
                 date: order.date,
                 orderDetail: order.orderDetail,
                 user_id: order.user_id,
+                user: order.user,
             }));
             return {
-                id: id,
                 name: users.name,
                 email: users.email,
                 address: users.address,
@@ -103,6 +105,7 @@ let UsersService = class UsersService {
         }
         catch (error) {
             console.log('error en el servicio de usuarios', error);
+            throw new Error('Error al obtener el usuario');
         }
     }
     async createUser(user) {
@@ -114,26 +117,33 @@ let UsersService = class UsersService {
                 throw new Error(`El usuario ${user.email} ya existe`);
             }
             const salt = await bcrypt.genSalt();
-            const hash = await bcrypt.hash(userFound.password, salt);
-            const createSuccess = this.usersRepository.create({
+            const hash = await bcrypt.hash(user.password, salt);
+            const userCreated = {
                 id: (0, uuid_1.v4)(),
-                password: hash,
-                ...userFound,
-            });
-            return new responseUser_dto_1.UserResponseDto(createSuccess);
+                ...user,
+                password: hash
+            };
+            const roleUser = user.role || role_enum_1.Roles.USER;
+            const createSuccess = this.usersRepository.create(userCreated);
+            const savedUser = await this.usersRepository.save(createSuccess);
+            return new responseUser_dto_1.UserResponseDto(savedUser);
         }
         catch (error) {
-            throw new Error(`Error al crear el usuario, vuelve a intentarlo ${error}`);
+            throw new Error(`Error al crear el usuario, vuelve a intentarlo ${error.message}`);
         }
     }
     async updateUser(id, userfound) {
         try {
+            if (!userfound || Object.keys(userfound).length === 0) {
+                throw new Error('No se proporcionaron valores para actualizar');
+            }
             await this.usersRepository.update(id, userfound);
             const updatedUser = await this.usersRepository.findOneBy({ id });
             return updatedUser;
         }
         catch (error) {
             console.log('error al actualizar el usuario en el servicio', error);
+            throw new Error('Error al actualizar el usuario');
         }
     }
     async deleteUser(id) {
@@ -146,6 +156,9 @@ let UsersService = class UsersService {
         }
     }
     async loginUser(user) {
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET no está definido en las variables de entorno');
+        }
         try {
             const userFound = await this.usersRepository.findOneBy({
                 email: user.email,
@@ -153,17 +166,19 @@ let UsersService = class UsersService {
             if (!userFound) {
                 throw new common_1.UnauthorizedException('User not found');
             }
-            const isPasswordValid = await bcrypt.compare(userFound.password, user.password);
+            const isPasswordValid = await bcrypt.compare(user.password, userFound.password);
+            console.log('¿Es válida la contraseña?', isPasswordValid);
             if (!isPasswordValid) {
                 throw new common_1.UnauthorizedException('Credenciales incorrectas');
             }
-            const payload = { userId: userFound.id, email: userFound.email };
-            const token = this.jwtService.sign(payload, { expiresIn: '1h' });
+            const secret = process.env.JWT_SECRET || 'default_secret_key';
+            const payload = { userId: userFound.id, email: userFound.email, role: userFound.role };
+            const token = this.jwtService.sign(payload, { secret, expiresIn: '1h' });
             return {
                 user: {
                     id: userFound.id,
                     email: userFound.email,
-                    name: userFound.name,
+                    role: [userFound.role],
                 },
                 token,
             };

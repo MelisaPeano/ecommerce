@@ -25,27 +25,16 @@ export class AuthController {
     return this.authService.getUsers();
   }
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   @Post('signin')
-  async loginUser(@Body('User') user: LoginUserDto) {
-    // Modificar la funcionalidad de signIn para que
-    // valide el password encriptado con el provisto en la solicitud.
-    if (!user.email && user.password) {
-      throw new BadRequestException('faltan datos');
-    }
+  async loginUser(@Body() user: LoginUserDto) {
     const login = await this.usersService.loginUser(user);
     return login;
   }
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   async signupUser(
-    @Body('User') user: CreateUserDto,
-    @Body('password') repetPassword: string,
+    @Body() user: CreateUserDto,
   ) {
-    if (!user.password && !repetPassword) {
-      throw new BadRequestException('Falta completar campos requeridos');
-    }
-    if (user.password === repetPassword) {
       await this.usersService.createUser(user);
       const signup = {
         id: user.name,
@@ -54,8 +43,5 @@ export class AuthController {
         email: user.email,
       };
       return signup;
-    } else {
-      throw new BadRequestException('campos incorrectos');
-    }
   }
 }

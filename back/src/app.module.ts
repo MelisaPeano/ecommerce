@@ -17,7 +17,10 @@ import { OrdersService } from './orders/orders.service';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { CloudinaryConfig } from './config/cloudinary';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { JwtService } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
   imports: [
@@ -32,6 +35,10 @@ import { JwtService } from '@nestjs/jwt';
         ...ConfigService.get<DataSourceOptions>('typeorm'),
         autoLoadEntities: true,
       }),
+    }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'fallback_secret_key', 
+      signOptions: { expiresIn: '1h' },
     }),
     AuthModule,
     ProductsModule,

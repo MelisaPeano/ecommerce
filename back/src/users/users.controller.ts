@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Put,
@@ -14,9 +15,13 @@ import {
 import { UsersService } from './users.service';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { UserResponseDto } from './dto/responseUser.dto';
 import { Request } from 'express';
+import { RoleUser } from 'src/decorators/roles.decorator';
+import { Roles } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Order } from 'src/entitys/order.entity';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 export interface UserInterface {
   email: string;
@@ -33,7 +38,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @HttpCode(200)
   @Get()
-  @UseGuards(AuthGuard)
+  @RoleUser(Roles.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
   async getUsers(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 5,
@@ -60,12 +66,16 @@ export class UsersController {
   }
   @HttpCode(200)
   @Get(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard) // YA VERIFIQUÉ QUE ESTÁ BIEN
   async getUserById(
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<UserResponseDto> {
     try {
       const foundUser = await this.usersService.getUsersById(id);
+      const orderUser = foundUser.orders.map((order) => ({
+        id: order.id,
+        date: order.date,
+      }))
       const user = new UserResponseDto({
         name: foundUser.name,
         email: foundUser.email,
@@ -73,21 +83,19 @@ export class UsersController {
         phone: foundUser.phone,
         country: foundUser.country,
         city: foundUser.city,
-        orders: {
-          id: foundUser.orders.map((order) => order.id),
-          date: foundUser.orders.map((order) => order.date),
-        },
+        orders: orderUser as Order[],
       });
       return user;
     } catch (error) {
       console.log('error buscando el usuario en el controlador', error);
+      throw new NotFoundException('Usuario no encontrado');
     }
   }
-  @HttpCode(200) // ACA DEBO RECIBIR LA MODIFICACION
+  @HttpCode(200) // FUNCIONA BIEN!
   @Put(':id')
   @UseGuards(AuthGuard)
   async updateUser(
-    @Body('user') user: CreateUserDto,
+    @Body() user: UpdateUserDto,
     @Param('id') id: string,
   ): Promise<string> {
     try {
@@ -95,11 +103,12 @@ export class UsersController {
       return foundUser.id;
     } catch (error) {
       console.log('error al actualizar el usuario en el controlador', error);
+      throw new NotFoundException('error al actualizar el usuario');
     }
   }
   @HttpCode(200)
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard) // YA VERIFIQUE QUE ESTÁ BIEN
   async deleteUser(@Param('id') id: string): Promise<string> {
     try {
       const foundUser = await this.usersService.deleteUser(id);

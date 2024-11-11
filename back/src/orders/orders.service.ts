@@ -57,7 +57,7 @@ export class OrdersService {
     await this.orderDetailsRepository.save(orderDetail);
     const order = this.orderRepository.create({
       id: uuid(),
-      user_id: user.id,
+      user_id: uuid(),
       date: new Date(),
       orderDetail,
     });
@@ -81,6 +81,7 @@ export class OrdersService {
       id: orders.id,
       user_id: orders.user_id,
       date: orders.date,
+      user: orders.user,
       orderDetail: {
         id: orderDetail[0].id,
         price: orders.orderDetail.price,

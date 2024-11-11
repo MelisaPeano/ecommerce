@@ -16,8 +16,11 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const auth_guard_1 = require("../auth/guards/auth.guard");
-const createUser_dto_1 = require("./dto/createUser.dto");
 const responseUser_dto_1 = require("./dto/responseUser.dto");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const role_enum_1 = require("../enums/role.enum");
+const roles_guard_1 = require("../auth/guards/roles.guard");
+const updateUser_dto_1 = require("./dto/updateUser.dto");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -46,6 +49,10 @@ let UsersController = class UsersController {
     async getUserById(id) {
         try {
             const foundUser = await this.usersService.getUsersById(id);
+            const orderUser = foundUser.orders.map((order) => ({
+                id: order.id,
+                date: order.date,
+            }));
             const user = new responseUser_dto_1.UserResponseDto({
                 name: foundUser.name,
                 email: foundUser.email,
@@ -53,15 +60,13 @@ let UsersController = class UsersController {
                 phone: foundUser.phone,
                 country: foundUser.country,
                 city: foundUser.city,
-                orders: {
-                    id: foundUser.orders.map((order) => order.id),
-                    date: foundUser.orders.map((order) => order.date),
-                },
+                orders: orderUser,
             });
             return user;
         }
         catch (error) {
             console.log('error buscando el usuario en el controlador', error);
+            throw new common_1.NotFoundException('Usuario no encontrado');
         }
     }
     async updateUser(user, id) {
@@ -71,6 +76,7 @@ let UsersController = class UsersController {
         }
         catch (error) {
             console.log('error al actualizar el usuario en el controlador', error);
+            throw new common_1.NotFoundException('error al actualizar el usuario');
         }
     }
     async deleteUser(id) {
@@ -88,7 +94,8 @@ exports.UsersController = UsersController;
 __decorate([
     (0, common_1.HttpCode)(200),
     (0, common_1.Get)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, roles_decorator_1.RoleUser)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, roles_guard_1.RolesGuard),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
@@ -115,10 +122,10 @@ __decorate([
     (0, common_1.HttpCode)(200),
     (0, common_1.Put)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    __param(0, (0, common_1.Body)('user')),
+    __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [createUser_dto_1.CreateUserDto, String]),
+    __metadata("design:paramtypes", [updateUser_dto_1.UpdateUserDto, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
 __decorate([
