@@ -20,6 +20,7 @@ const products_entity_1 = require("../entitys/products.entity");
 const roles_decorator_1 = require("../decorators/roles.decorator");
 const role_enum_1 = require("../enums/role.enum");
 const roles_guard_1 = require("../auth/guards/roles.guard");
+const swagger_1 = require("@nestjs/swagger");
 let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
@@ -71,6 +72,9 @@ let ProductsController = class ProductsController {
 };
 exports.ProductsController = ProductsController;
 __decorate([
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Retorna todos los productos' }),
     (0, common_1.Get)('/seeder'),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
@@ -79,6 +83,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getProducts", null);
 __decorate([
+    (0, swagger_1.ApiParam)({ name: 'id', required: true }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Retorna un producto' }),
     (0, common_1.HttpCode)(200),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -87,6 +93,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getProductById", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Retorna el id del producto creado' }),
+    (0, swagger_1.ApiBody)({ type: 'array de productos' }),
     (0, common_1.HttpCode)(201),
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
@@ -96,6 +105,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "createProduct", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Actualiza un producto',
+        description: 'Solo el admin puede actualizar un producto, requiere rol admin',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Retorna el id del producto modificado' }),
+    (0, swagger_1.ApiBody)({ type: 'array de productos' }),
+    (0, swagger_1.ApiParam)({ name: 'id', required: true }),
     (0, common_1.HttpCode)(200),
     (0, roles_decorator_1.RoleUser)(role_enum_1.Roles.ADMIN),
     (0, common_1.Put)(':id'),
@@ -107,6 +124,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "updateProduct", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Retorna el id del producto eliminado' }),
+    (0, swagger_1.ApiParam)({ name: 'id', required: true }),
     (0, common_1.HttpCode)(200),
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

@@ -1,12 +1,9 @@
 import { AuthService } from './auth.service';
-import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from 'src/users/dto/loginUser.dto';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 export declare class AuthController {
     private readonly authService;
-    private readonly usersService;
-    constructor(authService: AuthService, usersService: UsersService);
-    getUsers(): string;
+    constructor(authService: AuthService);
     loginUser(user: LoginUserDto): Promise<{
         user: {
             id: string;

@@ -8,27 +8,40 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoriesService = void 0;
 const common_1 = require("@nestjs/common");
-const categories_repository_1 = require("./categories.repository");
+const typeorm_1 = require("@nestjs/typeorm");
+const categories_entity_1 = require("../entitys/categories.entity");
+const typeorm_2 = require("typeorm");
 let CategoriesService = class CategoriesService {
-    constructor(categoriesRepository) {
-        this.categoriesRepository = categoriesRepository;
+    constructor(categories) {
+        this.categories = categories;
     }
     async getCategories() {
-        return this.categoriesRepository.getCategories();
+        return this.categories.find();
     }
     async addCategories(categories) {
-        if (!Array.isArray(categories)) {
-            throw new Error('Expected categories to be an array');
+        const addedCategories = [];
+        for (const category of categories) {
+            const existingCategory = await this.categories.findOne({
+                where: { name: category.name },
+            });
+            if (!existingCategory) {
+                const newCategory = this.categories.create(category);
+                addedCategories.push(await this.categories.save(newCategory));
+            }
         }
-        return await this.categoriesRepository.addCategories(categories);
+        return addedCategories;
     }
 };
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [categories_repository_1.CategoriesRepository])
+    __param(0, (0, typeorm_1.InjectRepository)(categories_entity_1.Category)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], CategoriesService);
 //# sourceMappingURL=categories.service.js.map

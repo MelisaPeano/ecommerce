@@ -1,9 +1,9 @@
-import { UsersService } from 'src/users/users.service';
-import { ProductsService } from 'src/products/products.service';
+import { UsersService } from '../users/users.service';
+import { ProductsService } from '../products/products.service';
 import { Repository } from 'typeorm';
-import { Order } from 'src/entitys/order.entity';
-import { OrderDetail } from 'src/entitys/orderDetails.entity';
-import { OrderDetailResponse } from 'src/orderDetail/dto/orderDetailResponse';
+import { Order } from '../entitys/order.entity';
+import { OrderDetail } from '../entitys/orderDetails.entity';
+import { OrderDetailResponse } from '../orderDetail/dto/orderDetailResponse';
 export declare class OrdersService {
     private readonly orderRepository;
     private readonly usersService;

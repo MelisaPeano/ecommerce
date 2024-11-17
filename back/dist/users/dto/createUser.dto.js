@@ -12,21 +12,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
 const class_validator_1 = require("class-validator");
 const role_enum_1 = require("../../enums/role.enum");
+const swagger_1 = require("@nestjs/swagger");
 class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'name',
+        type: String,
+        description: 'name del usuario entre 3 y 80 caracteres',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(3, 80),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "name", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'email',
+        type: String,
+        description: 'email del usuario',
+    }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'password',
+        type: String,
+        description: 'contraseña del usuario entre 8 y 15 caracteres, La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y un carácter especial: !@#$%^&*',
+    }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Length)(8, 15),
     (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/, {
@@ -35,23 +51,43 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'address',
+        type: String,
+        description: 'direccion del usuario entre 3 y 80 caracteres',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(3, 80),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "address", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'phone',
+        type: Number,
+        description: 'telefono del usuario entre 3 y 80 caracteres',
+    }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CreateUserDto.prototype, "phone", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'country',
+        type: String,
+        description: 'pais del usuario entre 5 y 20 caracteres',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(5, 20),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "country", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'city',
+        type: String,
+        description: 'ciudad del usuario entre 5 y 20 caracteres',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(5, 20),
@@ -63,6 +99,11 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "role", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        name: 'repetPassword',
+        type: String,
+        description: 'repetir contraseña del usuario',
+    }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Validate)(class_validator_1.Matches, ['password']),
     __metadata("design:type", String)

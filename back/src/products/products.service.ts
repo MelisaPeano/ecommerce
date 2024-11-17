@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { Products } from 'src/entitys/products.entity';
+import { PaginatedResult } from '../interfaces/paginatedInterface';
+import { Products } from '../entitys/products.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService {

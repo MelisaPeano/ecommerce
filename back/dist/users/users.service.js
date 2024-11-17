@@ -43,7 +43,7 @@ const typeorm_2 = require("@nestjs/typeorm");
 const uuid_1 = require("uuid");
 const bcrypt = __importStar(require("bcrypt"));
 const jwt_1 = require("@nestjs/jwt");
-const responseUser_dto_1 = require("./dto/responseUser.dto");
+const userResponse_dto_1 = require("./dto/userResponse.dto");
 const role_enum_1 = require("../enums/role.enum");
 let UsersService = class UsersService {
     constructor(usersRepository, jwtService) {
@@ -126,7 +126,7 @@ let UsersService = class UsersService {
             const roleUser = user.role || role_enum_1.Roles.USER;
             const createSuccess = this.usersRepository.create(userCreated);
             const savedUser = await this.usersRepository.save(createSuccess);
-            return new responseUser_dto_1.UserResponseDto(savedUser);
+            return new userResponse_dto_1.userResponseDto(savedUser);
         }
         catch (error) {
             throw new Error(`Error al crear el usuario, vuelve a intentarlo ${error.message}`);

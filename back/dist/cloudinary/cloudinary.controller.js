@@ -18,6 +18,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const cloudinary_service_1 = require("./cloudinary.service");
 const fileValidation_pipe_1 = require("../pipes/fileValidation.pipe");
 const auth_guard_1 = require("../auth/guards/auth.guard");
+const swagger_1 = require("@nestjs/swagger");
 let CloudinaryController = class CloudinaryController {
     constructor(cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
@@ -28,6 +29,10 @@ let CloudinaryController = class CloudinaryController {
 };
 exports.CloudinaryController = CloudinaryController;
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiResponse)({ status: 200 }),
+    (0, swagger_1.ApiParam)({ name: 'id' }),
+    (0, swagger_1.ApiParam)({ name: 'image' }),
     (0, common_1.Post)('/uploadImage/:id '),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image')),

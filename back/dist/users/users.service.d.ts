@@ -1,19 +1,19 @@
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { Users } from 'src/entitys/users.entity';
+import { Users } from '../entitys/users.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from 'src/users/dto/createUser.dto';
-import { LoginUserDto } from 'src/users/dto/loginUser.dto';
+import { CreateUserDto } from '../users/dto/createUser.dto';
+import { LoginUserDto } from '../users/dto/loginUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UserResponseDto } from './dto/responseUser.dto';
-import { Roles } from 'src/enums/role.enum';
+import { userResponseDto } from './dto/userResponse.dto';
+import { Roles } from '../enums/role.enum';
 export declare class UsersService {
     private usersRepository;
     private jwtService;
     constructor(usersRepository: Repository<Users>, jwtService: JwtService);
-    getUsers(page: number, limit: number): Promise<PaginatedResult<UserResponseDto>>;
-    getUsersById(id: string): Promise<UserResponseDto>;
-    createUser(user: CreateUserDto): Promise<UserResponseDto>;
+    getUsers(page: number, limit: number): Promise<PaginatedResult<userResponseDto>>;
+    getUsersById(id: string): Promise<userResponseDto>;
+    createUser(user: CreateUserDto): Promise<userResponseDto>;
     updateUser(id: string, userfound: UpdateUserDto): Promise<Users>;
     deleteUser(id: string): Promise<string>;
     loginUser(user: LoginUserDto): Promise<{

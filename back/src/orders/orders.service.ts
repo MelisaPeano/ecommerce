@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import { ProductsService } from 'src/products/products.service';
-import { Products } from 'src/entitys/products.entity';
+import { UsersService } from '../users/users.service';
+import { ProductsService } from '../products/products.service';
+import { Products } from '../entitys/products.entity';
 import { Repository } from 'typeorm';
-import { Order } from 'src/entitys/order.entity';
+import { Order } from '../entitys/order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderDetail } from 'src/entitys/orderDetails.entity';
+import { OrderDetail } from '../entitys/orderDetails.entity';
 import { v4 as uuid } from 'uuid';
-import { OrderDetailResponse } from 'src/orderDetail/dto/orderDetailResponse';
+import { OrderDetailResponse } from '../orderDetail/dto/orderDetailResponse';
 
 @Injectable()
 export class OrdersService {

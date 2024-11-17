@@ -1,20 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LoginUserDto } from 'src/users/dto/loginUser.dto';
-import { Users } from 'src/entitys/users.entity';
-import { UsersService } from 'src/users/users.service';
+import { LoginUserDto } from '../users/dto/loginUser.dto';
+import { UsersService } from '../users/users.service';
+import { CreateUserDto } from '../users/dto/createUser.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectRepository(Users)
-    private usersService: UsersService,
-  ) {}
-  getUsers() {
-    return 'En esta ruta es de Auth';
+  constructor(private readonly usersService: UsersService){}
+  async createUser(user: CreateUserDto) {
+    try {
+      const foundUser = await this.usersService.createUser(user);
+      return foundUser;
+    } catch (error) {
+      throw new Error('Method not implemented.');
+    }
   }
-  async validateToken(user: LoginUserDto): Promise<boolean> {
-    const foundUser = await this.usersService.loginUser(user);
-    return !!foundUser;
+  async loginUser(user: LoginUserDto) {
+    try {
+      const foundUser = await this.usersService.loginUser(user);
+      return foundUser;
+    } catch (error) {
+      throw new Error('Method not implemented.');
+    }
   }
+
 }

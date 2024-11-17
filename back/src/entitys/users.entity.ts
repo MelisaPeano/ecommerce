@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Order } from './order.entity';
-import { Roles } from 'src/enums/role.enum';
+import { Roles } from '../enums/role.enum';
 @Entity({
   name: 'users',
 })

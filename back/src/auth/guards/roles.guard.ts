@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 import { Roles } from "src/enums/role.enum";
@@ -14,7 +14,7 @@ export class RolesGuard implements CanActivate {
       requireRoles.some((role) => user?.role?.includes(role))
     const valid = user && user.role && hasRole();
     if(!valid) {
-      throw new ForbiddenException(
+      throw new UnauthorizedException(
         'You do not have permisson are not allowed to access this route'
       );
     }

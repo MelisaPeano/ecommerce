@@ -11,10 +11,15 @@ import { UploadApiResponse } from 'cloudinary';
 import { CloudinaryService } from './cloudinary.service';
 import { FileValidationPipe } from 'src/pipes/fileValidation.pipe';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('files')
 export class CloudinaryController {
   constructor(private readonly cloudinaryService: CloudinaryService) {} // como probar esta ruta
+  @ApiBearerAuth('access-token')
+  @ApiResponse({ status: 200 })
+  @ApiParam({ name: 'id' })
+  @ApiParam({ name: 'image' })
   @Post('/uploadImage/:id ')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image'))

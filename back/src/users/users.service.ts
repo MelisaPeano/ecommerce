@@ -1,17 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { Users } from 'src/entitys/users.entity';
+import { Users } from '../entitys/users.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from 'src/entitys/order.entity';
-import { CreateUserDto } from 'src/users/dto/createUser.dto';
+import { CreateUserDto } from '../users/dto/createUser.dto';
 import { v4 as uuid } from 'uuid';
-import { LoginUserDto } from 'src/users/dto/loginUser.dto';
+import { LoginUserDto } from '../users/dto/loginUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserResponseDto } from './dto/responseUser.dto';
-import { Roles } from 'src/enums/role.enum';
+import { userResponseDto } from './dto/userResponse.dto';
+import { Roles } from '../enums/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +22,7 @@ export class UsersService {
   async getUsers(
     page: number,
     limit: number,
-  ): Promise<PaginatedResult<UserResponseDto>> {
+  ): Promise<PaginatedResult<userResponseDto>> {
     try {
       const [data, totalItems] = await this.usersRepository.findAndCount({
         skip: (page - 1) * limit,
@@ -48,7 +47,7 @@ export class UsersService {
       console.log('error en el servicio de usuarios', error);
     }
   }
-  async getUsersById(id: string): Promise<UserResponseDto> {
+  async getUsersById(id: string): Promise<userResponseDto> {
     console.log(`Buscando usuario con ID: ${id}`);
     try {
       const users = await this.usersRepository.findOne({
@@ -79,7 +78,7 @@ export class UsersService {
       throw new Error('Error al obtener el usuario');
     }
   }
-  async createUser(user: CreateUserDto): Promise<UserResponseDto> {
+  async createUser(user: CreateUserDto): Promise<userResponseDto> {
     try {
       const userFound = await this.usersRepository.findOneBy({
         email: user.email,
@@ -97,7 +96,7 @@ export class UsersService {
       const roleUser = user.role || Roles.USER;
       const createSuccess = this.usersRepository.create(userCreated);
       const savedUser = await this.usersRepository.save(createSuccess);
-      return new UserResponseDto(savedUser);
+      return new userResponseDto(savedUser);
     } catch (error) {
       throw new Error(
         `Error al crear el usuario, vuelve a intentarlo ${error.message}`,

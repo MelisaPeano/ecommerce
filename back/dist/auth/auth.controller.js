@@ -15,23 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
-const users_service_1 = require("../users/users.service");
 const loginUser_dto_1 = require("../users/dto/loginUser.dto");
 const createUser_dto_1 = require("../users/dto/createUser.dto");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
-    constructor(authService, usersService) {
+    constructor(authService) {
         this.authService = authService;
-        this.usersService = usersService;
-    }
-    getUsers() {
-        return this.authService.getUsers();
     }
     async loginUser(user) {
-        const login = await this.usersService.loginUser(user);
+        const login = await this.authService.loginUser(user);
         return login;
     }
     async signupUser(user) {
-        await this.usersService.createUser(user);
+        await this.authService.createUser(user);
         const signup = {
             id: user.name,
             name: user.name,
@@ -43,12 +39,8 @@ let AuthController = class AuthController {
 };
 exports.AuthController = AuthController;
 __decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "getUsers", null);
-__decorate([
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Login exitoso' }),
+    (0, swagger_1.ApiParam)({ name: 'user', type: loginUser_dto_1.LoginUserDto }),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.Post)('signin'),
     __param(0, (0, common_1.Body)()),
@@ -57,6 +49,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "loginUser", null);
 __decorate([
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Registro exitoso' }),
+    (0, swagger_1.ApiParam)({ name: 'user', type: createUser_dto_1.CreateUserDto }),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     (0, common_1.Post)('signup'),
     __param(0, (0, common_1.Body)()),
@@ -66,7 +60,6 @@ __decorate([
 ], AuthController.prototype, "signupUser", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService,
-        users_service_1.UsersService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

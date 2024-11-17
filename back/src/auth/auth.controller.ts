@@ -1,41 +1,36 @@
 import {
-  BadRequestException,
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from 'src/users/dto/loginUser.dto';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
-import { AuthGuard } from './guards/auth.guard';
+import { ApiParam, ApiProperty, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UsersService,
   ) {}
-  @Get()
-  getUsers() {
-    return this.authService.getUsers();
-  }
+  @ApiResponse({ status: 200, description: 'Login exitoso' })
+  @ApiParam({ name: 'user', type: LoginUserDto })
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   async loginUser(@Body() user: LoginUserDto) {
-    const login = await this.usersService.loginUser(user);
+    const login = await this.authService.loginUser(user);
     return login;
   }
+  @ApiResponse({ status: 201, description: 'Registro exitoso' })
+  @ApiParam({ name: 'user', type: CreateUserDto })
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   async signupUser(
     @Body() user: CreateUserDto,
   ) {
-      await this.usersService.createUser(user);
+      await this.authService.createUser(user);
       const signup = {
         id: user.name,
         name: user.name,

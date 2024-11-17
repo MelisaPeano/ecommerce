@@ -16,11 +16,12 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const auth_guard_1 = require("../auth/guards/auth.guard");
-const responseUser_dto_1 = require("./dto/responseUser.dto");
+const userResponse_dto_1 = require("./dto/userResponse.dto");
 const roles_decorator_1 = require("../decorators/roles.decorator");
 const role_enum_1 = require("../enums/role.enum");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const updateUser_dto_1 = require("./dto/updateUser.dto");
+const swagger_1 = require("@nestjs/swagger");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -29,7 +30,7 @@ let UsersController = class UsersController {
         try {
             const users = await this.usersService.getUsers(page, limit);
             const usersWithoutPass = users.data.map((user) => {
-                const userResponse = new responseUser_dto_1.UserResponseDto(user);
+                const userResponse = new userResponse_dto_1.userResponseDto(user);
                 return userResponse;
             });
             return {
@@ -53,7 +54,7 @@ let UsersController = class UsersController {
                 id: order.id,
                 date: order.date,
             }));
-            const user = new responseUser_dto_1.UserResponseDto({
+            const user = new userResponse_dto_1.userResponseDto({
                 name: foundUser.name,
                 email: foundUser.email,
                 address: foundUser.address,
@@ -92,6 +93,11 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiOperation)({ summary: 'Obtener todos los usuarios, solo admin' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Obtener todos los usuarios' }),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
     (0, common_1.HttpCode)(200),
     (0, common_1.Get)(),
     (0, roles_decorator_1.RoleUser)(role_enum_1.Roles.ADMIN),
@@ -103,6 +109,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Protegido por auth0, para loguearse con auth0' }),
     (0, common_1.Get)('auth0/protected'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -110,6 +117,9 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAuth0Protected", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Obtener un usuario' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, common_1.HttpCode)(200),
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
@@ -119,6 +129,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserById", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Actualizar un usuario' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, common_1.HttpCode)(200),
     (0, common_1.Put)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
@@ -129,6 +142,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
 __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Eliminar un usuario' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, common_1.HttpCode)(200),
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

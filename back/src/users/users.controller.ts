@@ -15,13 +15,14 @@ import {
 import { UsersService } from './users.service';
 import { PaginatedResult } from 'src/interfaces/paginatedInterface';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { UserResponseDto } from './dto/responseUser.dto';
+import { userResponseDto } from './dto/userResponse.dto';
 import { Request } from 'express';
 import { RoleUser } from 'src/decorators/roles.decorator';
 import { Roles } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Order } from 'src/entitys/order.entity';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 export interface UserInterface {
   email: string;
@@ -36,6 +37,11 @@ export interface UserInterface {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Obtener todos los usuarios, solo admin' })
+  @ApiResponse({ status: 200, description: 'Obtener todos los usuarios' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @HttpCode(200)
   @Get()
   @RoleUser(Roles.ADMIN)
@@ -43,11 +49,11 @@ export class UsersController {
   async getUsers(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 5,
-  ): Promise<PaginatedResult<UserResponseDto>> {
+  ): Promise<PaginatedResult<userResponseDto>> {
     try {
       const users = await this.usersService.getUsers(page, limit);
       const usersWithoutPass = users.data.map((user) => {
-        const userResponse = new UserResponseDto(user);
+        const userResponse = new userResponseDto(user);
         return userResponse;
       });
       return {
@@ -60,23 +66,27 @@ export class UsersController {
       console.log('error al obtener los usuarios en el controlador', error);
     }
   }
+  @ApiOperation({ summary: 'Protegido por auth0, para loguearse con auth0' })
   @Get('auth0/protected')
   getAuth0Protected(@Req() req: Request) {
     return JSON.stringify(req.oidc.user);
   }
+  @ApiBearerAuth('access-token')
+  @ApiResponse({ status: 200, description: 'Obtener un usuario' })
+  @ApiParam({ name: 'id', type: String })
   @HttpCode(200)
   @Get(':id')
   @UseGuards(AuthGuard) // YA VERIFIQUÉ QUE ESTÁ BIEN
   async getUserById(
     @Param('id', new ParseUUIDPipe()) id: string,
-  ): Promise<UserResponseDto> {
+  ): Promise<userResponseDto> {
     try {
       const foundUser = await this.usersService.getUsersById(id);
       const orderUser = foundUser.orders.map((order) => ({
         id: order.id,
         date: order.date,
       }))
-      const user = new UserResponseDto({
+      const user = new userResponseDto({
         name: foundUser.name,
         email: foundUser.email,
         address: foundUser.address,
@@ -91,6 +101,9 @@ export class UsersController {
       throw new NotFoundException('Usuario no encontrado');
     }
   }
+  @ApiBearerAuth('access-token')
+  @ApiResponse({ status: 200, description: 'Actualizar un usuario' })
+  @ApiParam({ name: 'id', type: String })
   @HttpCode(200) // FUNCIONA BIEN!
   @Put(':id')
   @UseGuards(AuthGuard)
@@ -106,6 +119,9 @@ export class UsersController {
       throw new NotFoundException('error al actualizar el usuario');
     }
   }
+  @ApiBearerAuth('access-token')
+  @ApiResponse({ status: 200, description: 'Eliminar un usuario' })
+  @ApiParam({ name: 'id', type: String })
   @HttpCode(200)
   @Delete(':id')
   @UseGuards(AuthGuard) // YA VERIFIQUE QUE ESTÁ BIEN

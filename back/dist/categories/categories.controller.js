@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoriesController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 let CategoriesController = class CategoriesController {
     async seedCategories() {
         return await this.categories.getCategories();
@@ -18,7 +19,9 @@ let CategoriesController = class CategoriesController {
 };
 exports.CategoriesController = CategoriesController;
 __decorate([
-    (0, common_1.Get)('/seeder'),
+    (0, swagger_1.ApiOperation)({ summary: 'Endpoint sin parámetros' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Este endpoint devuelve todas las categorías' }),
+    (0, common_1.Get)('/all'),
     (0, common_1.HttpCode)(200),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

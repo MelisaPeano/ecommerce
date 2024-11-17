@@ -8,31 +8,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const users_entity_1 = require("../entitys/users.entity");
 const users_service_1 = require("../users/users.service");
 let AuthService = class AuthService {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getUsers() {
-        return 'En esta ruta es de Auth';
+    async createUser(user) {
+        try {
+            const foundUser = await this.usersService.createUser(user);
+            return foundUser;
+        }
+        catch (error) {
+            throw new Error('Method not implemented.');
+        }
     }
-    async validateToken(user) {
-        const foundUser = await this.usersService.loginUser(user);
-        return !!foundUser;
+    async loginUser(user) {
+        try {
+            const foundUser = await this.usersService.loginUser(user);
+            return foundUser;
+        }
+        catch (error) {
+            throw new Error('Method not implemented.');
+        }
     }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.Users)),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

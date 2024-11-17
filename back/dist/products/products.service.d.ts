@@ -1,7 +1,7 @@
-import { PaginatedResult } from 'src/interfaces/paginatedInterface';
-import { Products } from 'src/entitys/products.entity';
+import { PaginatedResult } from '../interfaces/paginatedInterface';
+import { Products } from '../entitys/products.entity';
 import { Repository } from 'typeorm';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 export declare class ProductsService {
     private readonly productsRepository;
     private readonly cloudinaryRepository;
