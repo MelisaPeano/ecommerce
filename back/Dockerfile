@@ -5,13 +5,13 @@ FROM node:20.12.0
 WORKDIR /app
 
 # Copiar los archivos package*.json para instalar las dependencias
-COPY back/package*.json ./
+COPY package*.json ./
 
 # Instalar las dependencias del proyecto
 RUN npm install
 
 # Copiar el resto del código fuente al contenedor
-COPY back ./
+COPY . ./
 
 # Construir la aplicación NestJS (usualmente se utiliza el comando 'npm run build')
 RUN npm run build
