@@ -11,7 +11,7 @@ COPY back/package*.json ./
 RUN npm install
 
 # Copiar el resto del código fuente al contenedor
-COPY COPY back ./
+COPY back ./
 
 # Construir la aplicación NestJS (usualmente se utiliza el comando 'npm run build')
 RUN npm run build
