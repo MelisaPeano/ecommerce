@@ -37,7 +37,7 @@ export interface UserInterface {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Obtener todos los usuarios, solo admin' })
   @ApiResponse({ status: 200, description: 'Obtener todos los usuarios' })
   @ApiQuery({ name: 'page', required: false, type: Number })
@@ -71,7 +71,7 @@ export class UsersController {
   getAuth0Protected(@Req() req: Request) {
     return JSON.stringify(req.oidc.user);
   }
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Obtener un usuario' })
   @ApiParam({ name: 'id', type: String })
   @HttpCode(200)
@@ -101,7 +101,7 @@ export class UsersController {
       throw new NotFoundException('Usuario no encontrado');
     }
   }
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Actualizar un usuario' })
   @ApiParam({ name: 'id', type: String })
   @HttpCode(200) // FUNCIONA BIEN!
@@ -119,7 +119,7 @@ export class UsersController {
       throw new NotFoundException('error al actualizar el usuario');
     }
   }
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Eliminar un usuario' })
   @ApiParam({ name: 'id', type: String })
   @HttpCode(200)

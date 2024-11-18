@@ -8,7 +8,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/users/dto/loginUser.dto';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
-import { ApiParam, ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +24,7 @@ export class AuthController {
     return login;
   }
   @ApiResponse({ status: 201, description: 'Registro exitoso' })
+  @ApiResponse({ status: 400, description: 'BadRequest' })
   @ApiParam({ name: 'user', type: CreateUserDto })
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')

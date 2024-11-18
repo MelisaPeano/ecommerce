@@ -13,7 +13,7 @@ import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'ID del usuario formato UUID' })
   @ApiResponse({ status: 200, description: 'retrna la orden de compra y el detalle de la misma' })
   @Get('/:id')
@@ -21,7 +21,7 @@ export class OrdersController {
   async getOrders(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.ordersService.getOrders(id);
   }
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'retrna la orden de compra creada con los productos agregados' })
   @ApiParam({ name: 'userId', description: 'ID del usuario formato UUID' })
   @ApiParam({ name: 'products', description: 'Array de productos' })

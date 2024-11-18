@@ -57,8 +57,24 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
 ## Resources
+Development documentation: (.env.development)
+you need:
+DB_HOST= Host/compose Docker
+DB_PORT= Port
+DB_USERNAME= User pstgres
+DB_PASSWORD=  Password user postgres
+DB_NAME= Nombre de la base de datos/ name data base
+CLOUDINARY_CLOUD_NAME= Cloudinary name
+CLOUDINARY_API_SECRET= Cloudinary api secret
+CLOUDINARY_API_KEYimport= cloudinary secret
+JWT_SECRET= jwt password secret
+AUTH0_SECRET= AUTH0 secret
+AUTH0_CLIENT_ID= Client id Auth0
+AUTH0_BASE_URL= base url Auth0
+AUTH0_ISSUER_BASE_URL= auth base issuer
+POSTGRES_PASSWORD= postgres password/ docker compose
+POSTGRES_DB= name data base/docker compose
 
 Check out a few resources that may come in handy when working with NestJS:
 
