@@ -88,5 +88,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Validate(Matches, ['password'])  // Asegura que 'password' y 'repetPassword' coincidan
   repetPassword: string;
+
+  constructor(partial: Partial<CreateUserDto>) {
+    Object.assign(this, partial);
+  }
   }
 

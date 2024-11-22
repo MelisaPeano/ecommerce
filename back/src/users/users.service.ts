@@ -78,7 +78,7 @@ export class UsersService {
       throw new Error('Error al obtener el usuario');
     }
   }
-  async createUser(user: CreateUserDto): Promise<userResponseDto> {
+  async createUser(user: CreateUserDto): Promise<Users> {
     try {
       const userFound = await this.usersRepository.findOneBy({
         email: user.email,
@@ -96,7 +96,7 @@ export class UsersService {
       const roleUser = user.role || Roles.USER;
       const createSuccess = this.usersRepository.create(userCreated);
       const savedUser = await this.usersRepository.save(createSuccess);
-      return new userResponseDto(savedUser);
+      return savedUser;
     } catch (error) {
       throw new Error(
         `Error al crear el usuario, vuelve a intentarlo ${error.message}`,
@@ -153,7 +153,7 @@ export class UsersService {
         user: {
           id: userFound.id,
           email: userFound.email,
-          role: [userFound.role],
+          role: userFound.role,
         },
         token,
       };

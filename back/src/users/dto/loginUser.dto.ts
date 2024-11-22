@@ -15,4 +15,8 @@ export class LoginUserDto {
     description: 'password del usuario' })
   @IsNotEmpty()
   password: string;
+
+  constructor(partial: Partial<LoginUserDto>) {
+    Object.assign(this, partial);
+  }
 }

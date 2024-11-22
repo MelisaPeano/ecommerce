@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/users/dto/loginUser.dto';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { ApiParam, ApiResponse } from '@nestjs/swagger';
+import { Users } from 'src/entitys/users.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -30,14 +31,13 @@ export class AuthController {
   @Post('signup')
   async signupUser(
     @Body() user: CreateUserDto,
-  ) {
-      await this.authService.createUser(user);
-      const signup = {
-        id: user.name,
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
+  ): Promise<Partial<Users>> {
+      const newUser = await this.authService.createUser(user);
+       return {
+        id: newUser.id,
+        name: newUser.name,
+        phone: newUser.phone,
+        email: newUser.email,
       };
-      return signup;
   }
 }
