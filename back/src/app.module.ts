@@ -32,9 +32,7 @@ dotenv.config();
       // estoy cargando la configuración de forma asíncrona
       inject: [ConfigService],
       useFactory: (ConfigService: ConfigService) => ({
-        ...ConfigService.get('environment') === 'test'
-           ? ConfigService.get('sqlite')
-           : ConfigService.get('typeorm'),
+        ...ConfigService.get('typeorm'),
         autoLoadEntities: true,
       }),
     }),
