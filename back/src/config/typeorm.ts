@@ -4,13 +4,13 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenvConfig({ path: '.env.development' });
 
-const SqliteTestDataSourceOptions: DataSourceOptions = {
-  type: 'sqlite',
-  database: ':memory:',
-  synchronize: true,
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  dropSchema: true,
-}
+// const SqliteTestDataSourceOptions: DataSourceOptions = {
+//   type: 'sqlite',
+//   database: ':memory:',
+//   synchronize: true,
+//   entities: ['dist/**/*.entity{.ts,.js}'],
+//   dropSchema: true,
+// }
 
 const config: DataSourceOptions = {
   type: 'postgres',
@@ -27,7 +27,7 @@ const config: DataSourceOptions = {
   ssl: false,
 };
 export default registerAs('typeorm', () => config);
-export const sqliteTestDataSource = registerAs('sqlite', () => SqliteTestDataSourceOptions);
+// export const sqliteTestDataSource = registerAs('sqlite', () => SqliteTestDataSourceOptions);
 
-export const conectionSource = new DataSource(config);
-export const sqliteTest = new DataSource(SqliteTestDataSourceOptions);
+// export const conectionSource = new DataSource(config);
+// export const sqliteTest = new DataSource(SqliteTestDataSourceOptions);

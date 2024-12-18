@@ -9,6 +9,8 @@ services:
       - .env.development
     depends_on:
       - postgresdb
+    networks:
+      - back_network
 
 
   postgresdb:
@@ -17,5 +19,10 @@ services:
       - pgdata:/var/lib/postgresql/data
     env_file:
       - .env.development
+    networks:
+      - back_network
 volumes:
   pgdata:
+networks:
+  back_network:
+    driver: bridge

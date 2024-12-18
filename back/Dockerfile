@@ -8,6 +8,7 @@ WORKDIR /app
 COPY back/package*.json ./
 
 # Instalar las dependencias del proyecto
+RUN npm install sqlite3 --save
 RUN npm install
 
 # Copiar el resto del código fuente al contenedor

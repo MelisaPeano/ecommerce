@@ -6,7 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import typeOrmConfig, { sqliteTestDataSource } from './config/typeorm';
+import typeOrmConfig from './config/typeorm';
 import { DataSourceOptions } from 'typeorm';
 import { CategoriesModule } from './categories/categories.module';
 import { SeederModule } from './seeder/seeder.module';
@@ -26,9 +26,7 @@ dotenv.config();
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeOrmConfig, sqliteTestDataSource, () => ({
-        environment: process.env.ENVIRONMENT || 'test',
-      })],
+      load: [typeOrmConfig],
     }),
     TypeOrmModule.forRootAsync({
       // estoy cargando la configuración de forma asíncrona
