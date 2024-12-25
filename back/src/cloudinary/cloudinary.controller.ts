@@ -28,6 +28,6 @@ export class CloudinaryController {
     @UploadedFile(FileValidationPipe)
     image: Express.Multer.File,
   ): Promise<UploadApiResponse> {
-    return this.cloudinaryService.uploadImage(image);
+    return this.cloudinaryService.uploadImage(image, id);
   }
 }

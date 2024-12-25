@@ -11,10 +11,12 @@ import { ProductsService } from 'src/products/products.service';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
+import { CategoriesModule } from 'src/categories/categories.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderDetail]),
+    CategoriesModule,
     UsersModule,
     ProductsModule,
     CloudinaryModule,

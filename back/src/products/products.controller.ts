@@ -19,6 +19,7 @@ import { RoleUser } from 'src/decorators/roles.decorator';
 import { Roles } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { createProductDto } from './dto/createProduct.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -51,16 +52,16 @@ export class ProductsController {
   }
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Retorna el id del producto creado' })
-  @ApiBody({ type: 'array de productos' })
+  @ApiBody({ type: createProductDto})
   @HttpCode(201)
   @Post()
   @UseGuards(AuthGuard)
-  async createProduct(@Body() product: Products[]): Promise<string[]> {
+  async createProduct(@Body() product: createProductDto): Promise<Products> {
     try {
       const create = await this.productsService.createProduct(product);
-      return create.map((product) => product.id);
+      return create
     } catch (error) {
-      console.log('error al crear el usuario en el controlador', error);
+      console.log('error al crear el producto en el controlador', error);
     }
   }
   @ApiBearerAuth()

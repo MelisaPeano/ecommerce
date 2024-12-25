@@ -4,6 +4,10 @@ import { Products } from '../entitys/products.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { createProductDto } from './dto/createProduct.dto';
+import { v4 as uuid } from 'uuid';
+import { CategoriesService } from 'src/categories/categories.service';
+import { newCategoryDto } from 'src/categories/dto/newCategory.dto';
 
 @Injectable()
 export class ProductsService {
@@ -11,6 +15,7 @@ export class ProductsService {
     @InjectRepository(Products)
     private readonly productsRepository: Repository<Products>,
     private readonly cloudinaryRepository: CloudinaryService,
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   async getProducts(
@@ -56,20 +61,31 @@ export class ProductsService {
       console.log('error en el servicio de productos', error);
     }
   }
-  async createProduct(products: Omit<Products, 'id'>[]): Promise<Products[]> {
-    const addedProducts: Products[] = [];
+  async createProduct(products: createProductDto): Promise<Products> {
 
-    for (const product of products) {
+    if (products) {
       const existingProduct = await this.productsRepository.findOne({
-        where: { name: product.name },
+        where: { name: products.name },
       });
+      const categories = await this.categoriesService.addCategories(new newCategoryDto({
+        name: products.category
+      }));
       if (!existingProduct) {
-        const newProduct = this.productsRepository.create(product);
-        addedProducts.push(await this.productsRepository.save(newProduct));
+        const newProduct = this.productsRepository.create({
+          id: uuid(),
+          name: products.name,
+          description: products.description,
+          price: products.price,
+          stock: products.stock,
+          category: categories.id,
+        });
+        await this.productsRepository.save(newProduct);
+        return newProduct;
       }
+      throw new Error('El producto ya existe');
     }
 
-    return addedProducts;
+    
   }
   async updateProduct(
     id: string,
@@ -108,7 +124,7 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    const uploadCloudinary = await this.cloudinaryRepository.uploadImage(file);
+    const uploadCloudinary = await this.cloudinaryRepository.uploadImage(file, id);
     product.imgUrl = uploadCloudinary.secure_url;
     return await this.productsRepository.save(product);
   }

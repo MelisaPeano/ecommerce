@@ -1,87 +1,65 @@
 [
   {
-    "name": "Iphone 15",
-    "description": "The best smartphone in the world",
-    "price": 199.99,
+    "name": "pizza pepperoni",
+    "description": "pizza con base de salsa de tomate, mozzarella y pepperoni, un tipo de salami curado hecho a base de carne de cerdo y de vaca mezclados y sazonados con pimentón",
+    "price": 6999,
+    "stock": 12,
+    "category": "pizza"
+  },
+  {
+    "name": "Pizza Margarita",
+    "description": "es una típica pizza napolitana elaborada con tomate, mozzarella, albahaca fresca, sal y aceite.",
+    "price": 6000,
+    "stock": 12,
+    "category": "pizza"
+  },
+  {
+    "name": "Pizza Hawaiana",
+    "description": "es una pizza que contiene una base de salsa pomodoro, queso mozzarella fundido y como toppings jamón y piña.",
+    "price": 7200,
     "stock": 12,
     "category": "smartphone"
-
   },
   {
-    "name": "Samsung Galaxy S23",
-    "description": "The best smartphone in the world",
-    "price": 150.0,
+    "name": "Pizza Vegana",
+    "description": "Disfruta el sabor de nuestra irresistible Veggie Lovers y descubre su deliciosa combinación de ingredientes: cebolla, maíz, pimiento verde, mozarella, champiñones y tomate en rodajas.",
+    "price": 7200,
     "stock": 12,
-    "category": "smartphone"
+    "category": "pizza"
   },
   {
-    "name": "Motorola Edge 40",
-    "description": "The best smartphone in the world",
-    "price": 179.89,
+    "name": "Pizza Cuatro quesos",
+    "description": "Para los amantes del queso",
+    "price": 6500,
     "stock": 12,
-    "category": "smartphone"
+    "category": "pizza"
   },
   {
-    "name": "Samsung Odyssey G9",
-    "description": "The best monitor in the world",
-    "price": 299.99,
+    "name": "Papas Fritas",
+    "description": "Papas fritas",
+    "price": 2500,
     "stock": 12,
-    "category": "monitor"
+    "category": "papas fritas"
   },
   {
-    "name": "LG UltraGear",
-    "description": "The best monitor in the world",
-    "price": 199.99,
+    "name": "Coca-cola",
+    "description": "Coca-cola 1,5litros",
+    "price": 4500,
     "stock": 12,
-    "category": "monitor"
+    "category": "bebidas"
   },
   {
-    "name": "Acer Predator",
-    "description": "The best monitor in the world",
-    "price": 150.0,
+    "name": "Seven-up",
+    "description": "seven-up 1,5litros",
+    "price": 3500,
     "stock": 12,
-    "category": "monitor"
+    "category": "bebidas"
   },
   {
-    "name": "Razer BlackWidow V3",
-    "description": "The best keyboard in the world",
-    "price": 99.99,
+    "name": "Corona",
+    "description": "corona x 750ml",
+    "price": 2500,
     "stock": 12,
-    "category": "keyboard"
-  },
-  {
-    "name": "Corsair K70",
-    "description": "The best keyboard in the world",
-    "price": 79.99,
-    "stock": 12,
-    "category": "keyboard"
-  },
-  {
-    "name": "Logitech G Pro",
-    "description": "The best keyboard in the world",
-    "price": 59.99,
-    "stock": 12,
-    "category": "keyboard"
-  },
-  {
-    "name": "Razer Viper",
-    "description": "The best mouse in the world",
-    "price": 49.99,
-    "stock": 12,
-    "category": "mouse"
-  },
-  {
-    "name": "Logitech G502 Pro",
-    "description": "The best mouse in the world",
-    "price": 39.99,
-    "stock": 12,
-    "category": "mouse"
-  },
-  {
-    "name": "SteelSeries Rival 3",
-    "description": "The best mouse in the world",
-    "price": 29.99,
-    "stock": 12,
-    "category": "mouse"
+    "category": "bebidas"
   }
 ]

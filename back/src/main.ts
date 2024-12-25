@@ -7,7 +7,7 @@ import { CategoriesSeed } from './seeder/categoriesSeed';
 import { auth } from 'express-openid-connect';
 import { config } from './config/auth0.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import { UserSeed } from './seeder/userSeeder';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(LoggerMiddleware);
@@ -21,8 +21,11 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
   // app.enableShutdownHooks();
+  const userSeed = app.get(UserSeed);
+  await userSeed.seed();
+  console.log('User seeding completed');
   const categoriesSeed = app.get(CategoriesSeed);
-  await categoriesSeed.seed();
+  await categoriesSeed.seed();;
   console.log('pre-seeding completed');
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Ecommerce API')

@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Admin",
+    "email": "admin@unemail.com",
+    "password": "pas1234!",
+    "address": "calle falsa 123",
+    "phone": "12345675",
+    "role": "admin",
+    "repeatPassword": "pas1234!"
+  },
+  {
+    "name": "User1",
+    "email": "user1@unemail.com",
+    "password": "pas12345!",
+    "address": "calle falsa 321",
+    "phone": "12345787",
+    "repeatPassword": "pas12345!"
+  }
+]
