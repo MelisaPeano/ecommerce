@@ -6,8 +6,8 @@ dotenvConfig({ path: '.env.development' });
 
 const config: DataSourceOptions = {
   type: 'postgres',
-  // host: process.env.DB_HOST,
-  host: 'localhost',
+  host: process.env.DB_HOST,
+  //host: 'localhost',
   port: parseInt(process.env.DB_PORT, 10), // convierto el puerto a número(tipado)
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
