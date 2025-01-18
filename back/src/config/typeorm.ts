@@ -14,7 +14,7 @@ const config: DataSourceOptions = {
   database: process.env.DB_NAME,
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true, // solo en desarrollo, modifico la DB automaticamente
-  // dropSchema: true,
+  //dropSchema: true,
   logging: true,
   migrations: ['dist/migrations/*{.ts,.js}'],
   ssl: false,
